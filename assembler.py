@@ -6,8 +6,11 @@ instructions = []
 with open(input_file) as file:
     instructions = file.readlines()
 
-# clean whitespaces
-instructions = [i.strip() for i in instructions]
+# clean whitespaces and split each instruction
+# [['var', 'X'], ['mov', 'R1', '$10']]
+instructions = [i.strip().split() for i in instructions]
+
+
 
 print(instructions)
 
