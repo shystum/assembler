@@ -20,5 +20,19 @@ def InvalidRegisterError(instruction: str) -> str:
             return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
     return ""
 
+def UndefinedVariableError(instruction: str) -> str:
+    instruction_type = find_instruction_type(instruction)
+    if instruction_type == "D":
+        if instruction[2] in constants.current_variables:
+            return ''
+        else:
+            return f"UndefinedVariableError: Undefined variable in line number {constants.line_count}. Is there any typo in the variable name?"
+    elif instruction_type == "E":
+        if instruction[1] in constants.current_variables:
+            return ''
+        else:
+            return f"UndefinedVariableError: Undefined variable in line number {constants.line_count}. Is there any typo in the variable name?"
+    return ''
 
-error_functions_list = [InvalidInstructionError, InvalidRegisterError]
+
+error_functions_list = [InvalidInstructionError, InvalidRegisterError, UndefinedVariableError]
