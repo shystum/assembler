@@ -48,7 +48,9 @@ def instructionToBinary(instruction: list[str]) -> str:
         
     return binary_instruction
 
-for i in instructions:
-    print(instructionToBinary(i))
+def main():
+    for i in instructions:
+        if i != '':
+            print(instructionToBinary(i))
 
 print(instructions)
