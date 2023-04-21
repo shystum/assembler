@@ -1,0 +1,1 @@
+err_typo="Error : Typos in instruction name or register name"

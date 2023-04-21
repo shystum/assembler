@@ -1,9 +1,12 @@
 from sys import argv
 from constants import opcode
 from op_func import *
+from errors import *
 
 input_file = argv[1]
 instructions = []
+current_variables = {}
+current_address = '0000000'
 
 with open(input_file) as file:
     instructions = file.readlines()
@@ -17,6 +20,10 @@ def instructionToBinary(instruction: list[str]) -> str:
     # add reg1 reg2 reg3
     binary_instruction = ''
     instruction_type = ''
+    if instruction[0] == 'var':
+        current_variables[instruction[1]] = current_address
+        current_address = bin(int(current_address, 2)+1)[2:].zfill(7)
+        return ''
     if instruction[0] != 'mov':
         binary_instruction += opcode[instruction[0]][0]
         instruction_type = opcode[instruction[0]][1]
@@ -45,12 +52,14 @@ def instructionToBinary(instruction: list[str]) -> str:
 
     elif instruction_type == "F":
         binary_instruction += typeF(instruction)
-        
+
     return binary_instruction
+
 
 def main():
     for i in instructions:
         if i != '':
             print(instructionToBinary(i))
+
 
 print(instructions)
