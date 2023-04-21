@@ -28,6 +28,8 @@ def typeC(instruction: list[str]) -> str:
     binary_instruction = ''
     unused_bits = '0'*(total_bits - opcode_bits - register_bits * 2)
     binary_instruction += unused_bits
+    binary_instruction += registers[instruction[1]]
+    binary_instruction += registers[instruction[2]]
 
     return binary_instruction
 
@@ -36,8 +38,8 @@ def typeD(instruction: list[str]) -> str:
     binary_instruction = ''
     unused_bits = '0'*(total_bits - opcode_bits - register_bits - memory_addr_bits)
     binary_instruction += unused_bits
-
-
+    binary_instruction += registers[instruction[1]]
+    binary_instruction += instruction[2]
     return binary_instruction
 
 
@@ -45,7 +47,7 @@ def typeE(instruction: list[str]) -> str:
     binary_instruction = ''
     unused_bits = '0'*(total_bits - opcode_bits - memory_addr_bits)
     binary_instruction += unused_bits
-
+    binary_instruction += instruction[1]
     return binary_instruction
 
 
@@ -53,5 +55,4 @@ def typeF(instruction: list[str]) -> str:
     binary_instruction = ''
     unused_bits = '0'*(total_bits - opcode_bits)
     binary_instruction += unused_bits
-
     return binary_instruction
