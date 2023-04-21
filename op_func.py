@@ -18,11 +18,15 @@ def typeA(instruction: list[str]) -> str:
 
 def typeB(instruction: list[str]) -> str:
     binary_instruction = ''
-    unused_bits = '0'*(total_bits - opcode_bits - register_bits - immediate_value_bits)
+    unused_bits = '0'*(total_bits - opcode_bits -
+                       register_bits - immediate_value_bits)
     binary_instruction += unused_bits
     binary_instruction += registers[instruction[1]]
-    binary_instruction += bin(int(instruction[2][1:]))[2:].zfill(immediate_value_bits) # $10 -> 10 -> 0b1010 -> 1010 -> 0000000000001010
+    # $10 -> 10 -> 0b1010 -> 1010 -> 0000000000001010
+    binary_instruction += bin(int(instruction[2][1:])
+                              )[2:].zfill(immediate_value_bits)
     return binary_instruction
+
 
 def typeC(instruction: list[str]) -> str:
     binary_instruction = ''
@@ -36,7 +40,8 @@ def typeC(instruction: list[str]) -> str:
 
 def typeD(instruction: list[str]) -> str:
     binary_instruction = ''
-    unused_bits = '0'*(total_bits - opcode_bits - register_bits - memory_addr_bits)
+    unused_bits = '0'*(total_bits - opcode_bits -
+                       register_bits - memory_addr_bits)
     binary_instruction += unused_bits
     binary_instruction += registers[instruction[1]]
     binary_instruction += instruction[2]
