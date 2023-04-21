@@ -1,5 +1,5 @@
-from assembler import find_instruction_type, total_lines
-from constants import opcode, registers, line_count, current_variables
+from assembler import find_instruction_type
+from constants import opcode, registers, current_variables
 import assembler
 import constants
 
