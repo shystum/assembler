@@ -72,14 +72,12 @@ def main():
         print(HaltError(instructions))
         exit()
     for i in instructions:
-        if i != '':
+        if i != []:
             for error in error_functions_list:
                 if error(i) != "":
                     print(error(i), end='')
                     exit()
             print(instructionToBinary(i))
-        else:
-            print(line_count)
         constants.line_count += 1
 
 
