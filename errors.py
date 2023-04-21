@@ -1,12 +1,12 @@
 from assembler import find_instruction_type, total_lines
-from constants import opcode, registers, line_count
+from constants import opcode, registers, line_count, current_variables
 import assembler
 import constants
 
 hlt_count = 0
 
 
-def InvalidInstructionError(instruction: str) -> str:
+def InvalidInstructionError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
     if instruction[0] not in opcode and instruction_type != "var" and instruction_type != 'label':
         return f"InvalidInstructionError: Invalid instruction in line number {constants.line_count}. Is there any typo in the instruction?"
@@ -14,7 +14,7 @@ def InvalidInstructionError(instruction: str) -> str:
         return ""
 
 
-def InvalidRegisterError(instruction: str = assembler.instruction) -> str:
+def InvalidRegisterError(instruction: list[str] = assembler.instruction) -> str:
     instruction_type = find_instruction_type(instruction)
     if instruction_type == "A" or instruction_type == "C":
         if not all([i in registers for i in instruction[1:]]):
@@ -45,7 +45,7 @@ def HaltError(instructions: list[list] = assembler.instruction) -> str:
     return ""
 
 
-def UndefinedVariableError(instruction: str) -> str:
+def UndefinedVariableError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
     if instruction_type == "D":
         if instruction[2] in constants.current_variables:
@@ -60,7 +60,7 @@ def UndefinedVariableError(instruction: str) -> str:
     return ''
 
 
-def IllegalImmediateValueError(instruction: str) -> str:
+def IllegalImmediateValueError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
     if instruction_type == "B":
         val = int(instruction[2][1:])
@@ -80,6 +80,14 @@ def VariablesNotInBeginning(instructions: list[list] = assembler.instruction):
     return ""
 
 
+def UndefinedLabelError(instruction: list[str]) -> str:
+    instruction_type = find_instruction_type(instruction)
+    if instruction_type == "E":
+        if instruction[1] not in current_variables:
+            return f"UndefinedLabelError: Undefined Label in line number {constants.line_count}"
+    return ""
+
+
 instruction_error_functions_list = [
-    InvalidInstructionError, InvalidRegisterError, UndefinedVariableError]
+    InvalidInstructionError, InvalidRegisterError, UndefinedVariableError, UndefinedLabelError]
 file_error_functions_list = [HaltError, VariablesNotInBeginning]
