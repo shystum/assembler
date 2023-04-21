@@ -70,9 +70,13 @@ def instructionToBinary(instruction: list[str]) -> str:
 
 
 def main():
+    for error in file_error_functions_list:
+            if error() != "":
+                print(error(), end='')
+                exit()
     for i in instructions:
         if i != []:
-            for error in error_functions_list:
+            for error in instruction_error_functions_list:
                 if error(i) != "":
                     print(error(i), end='')
                     exit()

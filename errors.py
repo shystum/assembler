@@ -24,9 +24,9 @@ def InvalidRegisterError(instructions: str = assembler.instructions) -> str:
     return ""
 
 
-def HaltError(instruction: list[list]) -> str:
+def HaltError(instructions: list[list] = assembler.instructions) -> str:
     hltCount = 0
-    for c in instruction:
+    for c in instructions:
         if c:
             if c[0] == "hlt":
                 hltCount += 1
@@ -35,9 +35,9 @@ def HaltError(instruction: list[list]) -> str:
 
     elif hltCount == 0:
         return "HaltError: No hlt instruction found"
-    for i in range(len(instruction)-1,0,-1):
-        if instruction[i]:
-            if instruction[i][0] != 'hlt':
+    for i in range(len(instructions)-1,0,-1):
+        if instructions[i]:
+            if instructions[i][0] != 'hlt':
                 return f"HaltError: hlt instruction not at last line. hlt instruction found in line {i}"
             else:
                 return ""
@@ -67,4 +67,7 @@ def IllegalImmediateValueError(instruction: str) -> str:
     return ""
 
 
-error_functions_list = [InvalidInstructionError, InvalidRegisterError, UndefinedVariableError, HaltError]
+# def VariablesNotInBeginning(instructions: )
+
+instruction_error_functions_list = [InvalidInstructionError, InvalidRegisterError, UndefinedVariableError]
+file_error_functions_list = [HaltError]
