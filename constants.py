@@ -1,3 +1,6 @@
+global line_count
+line_count = 1
+
 opcode = {
     'add': ('00000', 'A'),
     'sub': ('00001', 'A'),
