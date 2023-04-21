@@ -67,7 +67,15 @@ def IllegalImmediateValueError(instruction: str) -> str:
     return ""
 
 
-# def VariablesNotInBeginning(instructions: )
-
+def VariablesNotInBeginning(instructions: list[list] = assembler.instructions):
+    flagger = 0
+    for i in instructions:
+        if i:
+            if flagger ==0 and i[0] != 'var':
+                flagger =1
+            elif flagger == 1 and i[0] == 'var':
+                return "VariablesNotInBeginning: Variables not in the beginning of the file"
+    return ""
+            
 instruction_error_functions_list = [InvalidInstructionError, InvalidRegisterError, UndefinedVariableError]
-file_error_functions_list = [HaltError]
+file_error_functions_list = [HaltError, VariablesNotInBeginning]
