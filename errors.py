@@ -13,7 +13,6 @@ def InvalidInstructionError(instruction: str) -> str:
 
 
 def InvalidRegisterError(instruction: str) -> str:
-    print(instruction[0])
     instruction_type = find_instruction_type(instruction)
     if instruction_type == "A" or instruction_type == "C":
         if not all([i in registers for i in instruction[1:]]):
@@ -35,7 +34,7 @@ def HaltError(instruction: list[list]) -> str:
 
     elif hltCount == 0:
         return "HaltError: No hlt instruction found"
-    for i in range(len(instruction),0,-1):
+    for i in range(len(instruction)-1,0,-1):
         if instruction[i]:
             if instruction[i][0] != 'hlt':
                 return f"HaltError: hlt instruction not at last line. hlt instruction found in line {i}"
@@ -58,4 +57,4 @@ def UndefinedVariableError(instruction: str) -> str:
     return ''
 
 
-error_functions_list = [InvalidInstructionError, InvalidRegisterError]
+error_functions_list = [InvalidInstructionError, InvalidRegisterError, UndefinedVariableError] 
