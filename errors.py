@@ -1,24 +1,25 @@
 from assembler import find_instruction_type, total_lines
 from constants import opcode, registers, line_count
+import assembler
 import constants
 
 hlt_count = 0
 
 
 def InvalidInstructionError(instruction: str) -> str:
-    if instruction[0] not in opcode:
+    if instruction[0] not in opcode and instruction[0] != "var":
         return f"InvalidInstructionError: Invalid instruction in line number {constants.line_count}. Is there any typo in the instruction?"
     else:
         return ""
 
 
-def InvalidRegisterError(instruction: str) -> str:
-    instruction_type = find_instruction_type(instruction)
+def InvalidRegisterError(instructions: str = assembler.instructions) -> str:
+    instruction_type = find_instruction_type(instructions)
     if instruction_type == "A" or instruction_type == "C":
-        if not all([i in registers for i in instruction[1:]]):
+        if not all([i in registers for i in instructions[1:]]):
             return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
     elif instruction_type == "B" or instruction_type == "D":
-        if instruction[1] not in registers:
+        if instructions[1] not in registers:
             return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
     return ""
 

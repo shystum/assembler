@@ -19,7 +19,9 @@ total_lines = len(instructions)
 instructions = [i.strip().split() for i in instructions]
 
 def find_instruction_type(instruction: list[str]) -> str:
-    if instruction[0] != 'mov':
+    if instruction[0] == 'var':
+        instruction_type = 'var'
+    elif instruction[0] != 'mov':
         instruction_type = opcode[instruction[0]][1]
     else:
         if instruction[2][0] == '$':
@@ -29,6 +31,7 @@ def find_instruction_type(instruction: list[str]) -> str:
     return instruction_type
 
 def instructionToBinary(instruction: list[str]) -> str:
+    global current_address
     # add reg1 reg2 reg3
     binary_instruction = ''
     instruction_type = find_instruction_type(instruction)
@@ -67,17 +70,14 @@ def instructionToBinary(instruction: list[str]) -> str:
 
 
 def main():
-   
-    if HaltError(instructions) != "":
-        print(HaltError(instructions))
-        exit()
     for i in instructions:
         if i != []:
             for error in error_functions_list:
                 if error(i) != "":
                     print(error(i), end='')
                     exit()
-            print(instructionToBinary(i))
+            if instructionToBinary(i) != '':
+                print(instructionToBinary(i))
         constants.line_count += 1
 
 

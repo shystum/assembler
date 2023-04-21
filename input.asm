@@ -1,7 +1,5 @@
+var X
 mov R1 $10
 mov R2 $100
-
 mul R3 R2 R1
-
-st R3 1111001
-hlt
+st R3 X
