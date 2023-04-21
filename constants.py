@@ -2,6 +2,7 @@ global line_count
 line_count = 1
 
 current_variables = {}
+current_labels = {}
 
 opcode = {
     'add': ('00000', 'A'),

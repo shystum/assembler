@@ -6,21 +6,23 @@ import constants
 
 # input_file = argv[1]
 input_file = "input.asm"
-instructions = []
+instruction = []
 current_address = '0000000'
 
 with open(input_file) as file:
-    instructions = file.readlines()
+    instruction = file.readlines()
 
 # print(instructions)
 # clean whitespaces and split each instruction
 # [['var', 'X'], ['mov', 'R1', '$10']]
-total_lines = len(instructions)
-instructions = [i.strip().split() for i in instructions]
+total_lines = len(instruction)
+instruction = [i.strip().split() for i in instruction]
 
 def find_instruction_type(instruction: list[str]) -> str:
     if instruction[0] == 'var':
         instruction_type = 'var'
+    elif ':' in instruction[0]:
+        instruction_type = 'label'
     elif instruction[0] != 'mov':
         instruction_type = opcode[instruction[0]][1]
     else:
@@ -36,6 +38,9 @@ def instructionToBinary(instruction: list[str]) -> str:
     binary_instruction = ''
     instruction_type = find_instruction_type(instruction)
 
+    if ':' in instruction[0]: 
+        constants.current_labels[instruction[0][:-1]] = constants.line_count
+        return ''
     if instruction[0] == 'var':
         constants.current_variables[instruction[1]] = current_address
         current_address = bin(int(current_address, 2)+1)[2:].zfill(7)
@@ -74,7 +79,7 @@ def main():
             if error() != "":
                 print(error(), end='')
                 exit()
-    for i in instructions:
+    for i in instruction:
         if i != []:
             for error in instruction_error_functions_list:
                 if error(i) != "":
