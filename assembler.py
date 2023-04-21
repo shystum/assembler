@@ -12,8 +12,10 @@ current_address = '0000000'
 with open(input_file) as file:
     instructions = file.readlines()
 
+# print(instructions)
 # clean whitespaces and split each instruction
 # [['var', 'X'], ['mov', 'R1', '$10']]
+total_lines = len(instructions)
 instructions = [i.strip().split() for i in instructions]
 
 def find_instruction_type(instruction: list[str]) -> str:
@@ -65,6 +67,10 @@ def instructionToBinary(instruction: list[str]) -> str:
 
 
 def main():
+   
+    if HaltError(instructions) != "":
+        print(HaltError(instructions))
+        exit()
     for i in instructions:
         if i != '':
             for error in error_functions_list:
@@ -72,7 +78,10 @@ def main():
                     print(error(i), end='')
                     exit()
             print(instructionToBinary(i))
-            constants.line_count += 1
+        else:
+            print(line_count)
+        constants.line_count += 1
+
 
 if __name__ == "__main__":
     main()

@@ -1,16 +1,19 @@
-from assembler import find_instruction_type
+from assembler import find_instruction_type, total_lines
 from constants import opcode, registers, line_count
 import constants
 
+hlt_count = 0
+
 
 def InvalidInstructionError(instruction: str) -> str:
-    if instruction[0] not in opcode: 
+    if instruction[0] not in opcode:
         return f"InvalidInstructionError: Invalid instruction in line number {constants.line_count}. Is there any typo in the instruction?"
     else:
         return ""
 
 
 def InvalidRegisterError(instruction: str) -> str:
+    print(instruction[0])
     instruction_type = find_instruction_type(instruction)
     if instruction_type == "A" or instruction_type == "C":
         if not all([i in registers for i in instruction[1:]]):
@@ -18,6 +21,26 @@ def InvalidRegisterError(instruction: str) -> str:
     elif instruction_type == "B" or instruction_type == "D":
         if instruction[1] not in registers:
             return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
+    return ""
+
+
+def HaltError(instruction: list[list]) -> str:
+    hltCount = 0
+    for c in instruction:
+        if c:
+            if c[0] == "hlt":
+                hltCount += 1
+    if hltCount > 1:
+        return "HaltError: More than one hlt instruction found"
+
+    elif hltCount == 0:
+        return "HaltError: No hlt instruction found"
+    for i in range(len(instruction),0,-1):
+        if instruction[i]:
+            if instruction[i][0] != 'hlt':
+                return f"HaltError: hlt instruction not at last line. hlt instruction found in line {i}"
+            else:
+                return ""
     return ""
 
 def UndefinedVariableError(instruction: str) -> str:
@@ -35,4 +58,4 @@ def UndefinedVariableError(instruction: str) -> str:
     return ''
 
 
-error_functions_list = [InvalidInstructionError, InvalidRegisterError, UndefinedVariableError]
+error_functions_list = [InvalidInstructionError, InvalidRegisterError]
