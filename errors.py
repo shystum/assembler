@@ -58,4 +58,13 @@ def UndefinedVariableError(instruction: str) -> str:
     return ''
 
 
-error_functions_list = [InvalidInstructionError, InvalidRegisterError, UndefinedVariableError] 
+def IllegalImmediateValueError(instruction: str) -> str:
+    instruction_type = find_instruction_type(instruction)
+    if instruction_type == "B":
+        val = int(instruction[2][1:])
+        if val < 0 or val > 127:
+            return f"IllegalImmediateValueError: Illegal immediate value in line number {constants.line_count}" 
+    return ""
+
+
+error_functions_list = [InvalidInstructionError, InvalidRegisterError, UndefinedVariableError, HaltError]
