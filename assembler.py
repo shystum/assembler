@@ -7,7 +7,6 @@ import constants
 # input_file = argv[1]
 input_file = "input.asm"
 instructions = []
-current_variables = {}
 current_address = '0000000'
 
 with open(input_file) as file:
@@ -33,7 +32,7 @@ def instructionToBinary(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
 
     if instruction[0] == 'var':
-        current_variables[instruction[1]] = current_address
+        constants.current_variables[instruction[1]] = current_address
         current_address = bin(int(current_address, 2)+1)[2:].zfill(7)
         return ''
     if instruction[0] != 'mov':

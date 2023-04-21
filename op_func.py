@@ -1,5 +1,5 @@
 from constants import registers
-from assembler import current_variables
+import constants
 total_bits = 16
 opcode_bits = 5
 register_bits = 3
@@ -45,7 +45,7 @@ def typeD(instruction: list[str]) -> str:
                        register_bits - memory_addr_bits)
     binary_instruction += unused_bits
     binary_instruction += registers[instruction[1]]
-    binary_instruction += current_variables[instruction[2]]
+    binary_instruction += constants.current_variables[instruction[2]]
     return binary_instruction
 
 
@@ -53,7 +53,7 @@ def typeE(instruction: list[str]) -> str:
     binary_instruction = ''
     unused_bits = '0'*(total_bits - opcode_bits - memory_addr_bits)
     binary_instruction += unused_bits
-    binary_instruction += current_variables[instruction[1]]
+    binary_instruction += constants.current_variables[instruction[1]]
     return binary_instruction
 
 

@@ -1,4 +1,4 @@
-from assembler import current_variables, find_instruction_type
+from assembler import find_instruction_type
 from constants import opcode, registers, line_count
 import constants
 

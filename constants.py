@@ -1,6 +1,8 @@
 global line_count
 line_count = 1
 
+current_variables = {}
+
 opcode = {
     'add': ('00000', 'A'),
     'sub': ('00001', 'A'),
