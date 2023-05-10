@@ -2,12 +2,12 @@ from sys import argv
 from constants import opcode
 from op_func import *
 from errors import *
+from convertors import *
 import constants
 
 # input_file = argv[1]
 input_file = "input.asm"
 instruction = []
-current_address = '0000000'
 
 with open(input_file) as file:
     instruction = file.readlines()
@@ -17,33 +17,41 @@ with open(input_file) as file:
 # [['var', 'X'], ['mov', 'R1', '$10']]
 total_lines = len(instruction)
 instruction = [i.strip().split() for i in instruction]
+var_count = len([i for i in instruction if 'var' in i])
+current_address = integerToSevenBitBinary(total_lines - var_count)
+
 
 def find_instruction_type(instruction: list[str]) -> str:
+    instruction_type = ''
+    if ':' in instruction[0]:
+        instruction_type = 'label+'
+        instruction = instruction[1:]
     if instruction[0] == 'var':
-        instruction_type = 'var'
-    elif ':' in instruction[0]:
-        instruction_type = 'label'
+        instruction_type += 'var'
     elif instruction[0] != 'mov':
-        instruction_type = opcode[instruction[0]][1]
+        instruction_type += opcode[instruction[0]][1]
     else:
         if instruction[2][0] == '$':
-            instruction_type = 'B'
+            instruction_type += 'B'
         else:
-            instruction_type = 'C'
+            instruction_type += 'C'
     return instruction_type
 
-def instructionToBinary(instruction: list[str]) -> str:
+
+def instructionToBinary(instruction: list[str], instructions: list[list[str]] = instruction) -> str:
     global current_address
     # add reg1 reg2 reg3
     binary_instruction = ''
     instruction_type = find_instruction_type(instruction)
 
-    if ':' in instruction[0]: 
+    if 'label' in instruction_type:
         constants.current_labels[instruction[0][:-1]] = constants.line_count
-        return ''
+        instruction = instruction[1:]
+        instruction_type = instruction_type[-1]
     if instruction[0] == 'var':
         constants.current_variables[instruction[1]] = current_address
-        current_address = bin(int(current_address, 2)+1)[2:].zfill(7)
+        current_address = integerToSevenBitBinary(
+            sevenBitBinaryToInteger(current_address)+1)
         return ''
     if instruction[0] != 'mov':
         binary_instruction += opcode[instruction[0]][0]
@@ -66,7 +74,7 @@ def instructionToBinary(instruction: list[str]) -> str:
         binary_instruction += typeD(instruction)
 
     elif instruction_type == "E":
-        binary_instruction += typeE(instruction)
+        binary_instruction += typeE(instruction, instructions)
 
     elif instruction_type == "F":
         binary_instruction += typeF(instruction)
@@ -75,10 +83,6 @@ def instructionToBinary(instruction: list[str]) -> str:
 
 
 def main():
-    for error in file_error_functions_list:
-            if error() != "":
-                print(error(), end='')
-                exit()
     for i in instruction:
         if i != []:
             for error in instruction_error_functions_list:
@@ -88,6 +92,11 @@ def main():
             if instructionToBinary(i) != '':
                 print(instructionToBinary(i))
         constants.line_count += 1
+
+    for error in file_error_functions_list:
+        if error() != "":
+            print(error(), end='')
+            exit()
 
 
 if __name__ == "__main__":
