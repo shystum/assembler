@@ -8,7 +8,7 @@ hlt_count = 0
 
 def InvalidInstructionError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
-    if instruction[0] not in opcode and instruction_type != "var" and instruction_type != 'label':
+    if instruction[0] not in opcode and instruction_type != "var" and 'label' not in instruction_type:
         return f"InvalidInstructionError: Invalid instruction in line number {constants.line_count}. Is there any typo in the instruction?"
     else:
         return ""
@@ -29,7 +29,7 @@ def HaltError(instructions: list[list] = assembler.instruction) -> str:
     hltCount = 0
     for c in instructions:
         if c:
-            if c[0] == "hlt":
+            if "hlt" in c:
                 hltCount += 1
     if hltCount > 1:
         return "HaltError: More than one hlt instruction found"
@@ -38,7 +38,7 @@ def HaltError(instructions: list[list] = assembler.instruction) -> str:
         return "HaltError: No hlt instruction found"
     for i in range(len(instructions)-1, 0, -1):
         if instructions[i]:
-            if instructions[i][0] != 'hlt':
+            if 'hlt' not in instructions[i][0]:
                 return f"HaltError: hlt instruction not at last line. hlt instruction found in line {i}"
             else:
                 return ""
@@ -49,11 +49,6 @@ def UndefinedVariableError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
     if instruction_type == "D":
         if instruction[2] in constants.current_variables:
-            return ''
-        else:
-            return f"UndefinedVariableError: Undefined variable in line number {constants.line_count}. Is there any typo in the variable name?"
-    elif instruction_type == "E":
-        if instruction[1] in constants.current_variables:
             return ''
         else:
             return f"UndefinedVariableError: Undefined variable in line number {constants.line_count}. Is there any typo in the variable name?"
@@ -69,7 +64,7 @@ def IllegalImmediateValueError(instruction: list[str]) -> str:
     return ""
 
 
-def VariablesNotInBeginning(instructions: list[list] = assembler.instruction):
+def VariablesNotInBeginning(instructions: list[list] = assembler.instruction) -> str:
     flagger = 0
     for i in instructions:
         if i:
@@ -80,14 +75,15 @@ def VariablesNotInBeginning(instructions: list[list] = assembler.instruction):
     return ""
 
 
-def UndefinedLabelError(instruction: list[str]) -> str:
-    instruction_type = find_instruction_type(instruction)
-    if instruction_type == "E":
-        if instruction[1] not in current_variables:
-            return f"UndefinedLabelError: Undefined Label in line number {constants.line_count}"
+def UndefinedLabelError(instructions: list[str] = assembler.instruction) -> str:
+    for instruction in instructions:
+        instruction_type = find_instruction_type(instruction)
+        if instruction_type == "E":
+            if instruction[1] not in constants.current_labels:
+                return f"UndefinedLabelError: Undefined Label in line number {constants.line_count}"
     return ""
 
 
 instruction_error_functions_list = [
-    InvalidInstructionError, InvalidRegisterError, UndefinedVariableError, UndefinedLabelError]
-file_error_functions_list = [HaltError, VariablesNotInBeginning]
+    InvalidInstructionError, InvalidRegisterError, UndefinedVariableError]
+file_error_functions_list = [HaltError, VariablesNotInBeginning, UndefinedLabelError]
