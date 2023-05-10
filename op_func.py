@@ -1,4 +1,5 @@
 from constants import registers
+from convertors import *
 import constants
 total_bits = 16
 opcode_bits = 5
@@ -9,7 +10,7 @@ memory_addr_bits = 7
 
 def typeA(instruction: list[str]) -> str:
     binary_instruction = ''
-    unused_bits = '0'*(total_bits - opcode_bits - registers * 3)
+    unused_bits = '0'*(total_bits - opcode_bits - register_bits * 3)
     binary_instruction += unused_bits
     binary_instruction += registers[instruction[1]]
     binary_instruction += registers[instruction[2]]
@@ -49,11 +50,14 @@ def typeD(instruction: list[str]) -> str:
     return binary_instruction
 
 
-def typeE(instruction: list[str]) -> str:
+def typeE(instruction: list[str], instructions: list[list[str]]) -> str:
+    for i in instructions:
+        if ':' in i[0]:
+            constants.current_labels[i[0][:-1]] = integerToSevenBitBinary(constants.line_count)
     binary_instruction = ''
     unused_bits = '0'*(total_bits - opcode_bits - memory_addr_bits)
     binary_instruction += unused_bits
-    binary_instruction += constants.current_variables[instruction[1]]
+    binary_instruction += constants.current_labels[instruction[1]]
     return binary_instruction
 
 
