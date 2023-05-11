@@ -38,7 +38,7 @@ def HaltError(instructions: list[list] = assembler.instruction) -> str:
         return "HaltError: No hlt instruction found"
     for i in range(len(instructions)-1, 0, -1):
         if instructions[i]:
-            if 'hlt' not in instructions[i][0]:
+            if 'hlt' not in instructions[i]:
                 return f"HaltError: hlt instruction not at last line. hlt instruction found in line {i}"
             else:
                 return ""

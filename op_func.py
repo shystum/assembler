@@ -25,7 +25,7 @@ def typeB(instruction: list[str]) -> str:
     binary_instruction += unused_bits
     binary_instruction += registers[instruction[1]]
     # $10 -> 10 -> 0b1010 -> 1010 -> 0000000000001010
-    binary_instruction += bin(int(instruction[2][1:])
+    binary_instruction += bin(int(instruction[2][1:])%128
                               )[2:].zfill(immediate_value_bits)
     return binary_instruction
 

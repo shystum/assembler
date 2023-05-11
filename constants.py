@@ -3,6 +3,7 @@ line_count = 1
 
 current_variables = {}
 current_labels = {}
+MEM_SIZE = 256
 
 opcode = {
     'add': ('00000', 'A'),
@@ -36,3 +37,5 @@ registers = {
     'R6': '110',
     'FLAGS': '111'
 }
+
+memory = [0] * int((MEM_SIZE/2))
