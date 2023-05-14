@@ -5,6 +5,8 @@ current_variables = {}
 current_labels = {}
 MEM_SIZE = 256
 
+FLAG = {'UnusedBit':'000000000000', 'V':'0', 'L':'0','G': '0', 'E':'0'}
+
 opcode = {
     'add': ('00000', 'A'),
     'sub': ('00001', 'A'),
