@@ -16,6 +16,8 @@ def InvalidInstructionError(instruction: list[str]) -> str:
 
 def InvalidRegisterError(instruction: list[str] = assembler.instruction) -> str:
     instruction_type = find_instruction_type(instruction)
+    if 'label' in instruction_type:
+        instruction = instruction[1:]
     if "A" in instruction_type or "C" in instruction_type:
         if not all([i in registers for i in instruction[1:]]):
             return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
@@ -47,6 +49,8 @@ def HaltError(instructions: list[list] = assembler.instruction) -> str:
 
 def UndefinedVariableError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
+    if 'label' in instruction_type:
+        instruction = instruction[1:]
     if "D" in instruction_type:
         if instruction[2] in constants.current_variables:
             return ''
@@ -59,6 +63,8 @@ def UndefinedVariableError(instruction: list[str]) -> str:
 
 def IllegalImmediateValueError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
+    if 'label' in instruction_type:
+        instruction = instruction[1:]
     if "B" in instruction_type :
         val = int(instruction[2][1:])
         if val < 0 or val > 127:
