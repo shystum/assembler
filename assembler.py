@@ -66,7 +66,7 @@ def instructionToBinary(instruction: list[str], instructions: list[list[str]] = 
         if instruction[2][0] == '$':
             binary_instruction += opcode[instruction[0]][0][0]
         else:
-            binary_instruction += opcode[instruction[0]][0][1]
+            binary_instruction += opcode[instruction[0]][1][0]
 
     if instruction_type == "A":
         binary_instruction += typeA(instruction)
