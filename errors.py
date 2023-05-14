@@ -50,6 +50,8 @@ def UndefinedVariableError(instruction: list[str]) -> str:
     if instruction_type == "D":
         if instruction[2] in constants.current_variables:
             return ''
+        elif instruction[2] in constants.current_labels:
+            return f"UndefinedVariableError: You misused a label as a variable in line number {constants.line_count}"
         else:
             return f"UndefinedVariableError: Undefined variable in line number {constants.line_count}. Is there any typo in the variable name?"
     return ''
@@ -81,9 +83,11 @@ def UndefinedLabelError(instructions: list[str] = assembler.instruction) -> str:
         if instruction_type == "E":
             if instruction[1] not in constants.current_labels:
                 return f"UndefinedLabelError: Undefined Label in line number {constants.line_count}"
+            elif instruction[1] in constants.current_variables:
+                return f"UndefinedVariableError: You misused a variable as a label in line number {constants.line_count}"
     return ""
 
 
 instruction_error_functions_list = [
-    InvalidInstructionError, InvalidRegisterError, UndefinedVariableError]
+    InvalidInstructionError, InvalidRegisterError, IllegalImmediateValueError, UndefinedVariableError]
 file_error_functions_list = [HaltError, VariablesNotInBeginning, UndefinedLabelError]

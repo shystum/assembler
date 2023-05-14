@@ -21,6 +21,10 @@ constants.var_count = len([i for i in instruction if 'var' in i])
 # print(constants.var_count)
 # print(total_lines, total_lines-constants.var_count + 1)
 current_address = integerToSevenBitBinary(total_lines - constants.var_count)
+for i in range(len(instruction)):
+    if ':' in instruction[i][0]:
+        if instruction[i][0][:-1] not in constants.current_labels:
+            constants.current_labels[instruction[i][0][:-1]] = integerToSevenBitBinary(i-constants.var_count)
 
 
 def find_instruction_type(instruction: list[str]) -> str:
