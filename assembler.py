@@ -81,6 +81,10 @@ def instructionToBinary(instruction: list[str], instructions: list[list[str]] = 
         binary_instruction += typeD(instruction)
 
     elif instruction_type == "E":
+        check = UndefinedLabelError(instructions)
+        if check != "":
+            print(check, end='')
+            exit()
         binary_instruction += typeE(instruction, instructions)
 
     elif instruction_type == "F":
