@@ -17,10 +17,10 @@ with open(input_file) as file:
 # [['var', 'X'], ['mov', 'R1', '$10']]
 total_lines = len(instruction)
 instruction = [i.strip().split() for i in instruction if i.strip() != '']
-var_count = len([i for i in instruction if 'var' in i])
-print(var_count)
-print(total_lines, total_lines-var_count + 1)
-current_address = integerToSevenBitBinary(total_lines - var_count + 1)
+constants.var_count = len([i for i in instruction if 'var' in i])
+# print(constants.var_count)
+# print(total_lines, total_lines-constants.var_count + 1)
+current_address = integerToSevenBitBinary(total_lines - constants.var_count)
 
 
 def find_instruction_type(instruction: list[str]) -> str:
@@ -47,8 +47,8 @@ def instructionToBinary(instruction: list[str], instructions: list[list[str]] = 
     instruction_type = find_instruction_type(instruction)
 
     if 'label' in instruction_type:
-        # print(constants.line_count-var_count, instruction[0][:-1])
-        constants.current_labels[instruction[0][:-1]] = constants.line_count-var_count
+        # print(constants.line_count-constants.var_count, instruction[0][:-1])
+        # constants.current_labels[instruction[0][:-1]] = integerToSevenBitBinary(constants.line_count-constants.var_count)
         instruction = instruction[1:]
         instruction_type = instruction_type[-1]
     if instruction[0] == 'var':
@@ -95,6 +95,7 @@ def main():
             if instructionToBinary(i) != '':
                 print(instructionToBinary(i))
         constants.line_count += 1
+        # print(constants.line_count)
 
     for error in file_error_functions_list:
         if error() != "":

@@ -51,13 +51,16 @@ def typeD(instruction: list[str]) -> str:
 
 
 def typeE(instruction: list[str], instructions: list[list[str]]) -> str:
-    for i in instructions:
-        if ':' in i[0]:
-            constants.current_labels[i[0][:-1]] = integerToSevenBitBinary(constants.line_count)
+    for i in range(len(instructions)):
+        if ':' in instructions[i][0]:
+            if instructions[i][0][:-1] not in constants.current_labels:
+                # print(instructions[i][0][:-1], i-constants.var_count)
+                # print(instructions[i])
+                constants.current_labels[instructions[i][0][:-1]] = integerToSevenBitBinary(i-constants.var_count)
     binary_instruction = ''
     unused_bits = '0'*(total_bits - opcode_bits - memory_addr_bits)
     binary_instruction += unused_bits
-    binary_instruction += constants.current_labels[instruction[1]]
+    binary_instruction += (constants.current_labels[instruction[1]])
     return binary_instruction
 
 

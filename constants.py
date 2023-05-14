@@ -1,5 +1,7 @@
 global line_count
+global var_count
 line_count = 1
+var_count = 0
 
 current_variables = {}
 current_labels = {}
