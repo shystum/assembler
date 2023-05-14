@@ -16,10 +16,10 @@ def InvalidInstructionError(instruction: list[str]) -> str:
 
 def InvalidRegisterError(instruction: list[str] = assembler.instruction) -> str:
     instruction_type = find_instruction_type(instruction)
-    if instruction_type == "A" or instruction_type == "C":
+    if "A" in instruction_type or "C" in instruction_type:
         if not all([i in registers for i in instruction[1:]]):
             return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
-    elif instruction_type == "B" or instruction_type == "D":
+    elif "B" in instruction_type or "D" in instruction_type:
         if instruction[1] not in registers:
             return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
     return ""
@@ -47,7 +47,7 @@ def HaltError(instructions: list[list] = assembler.instruction) -> str:
 
 def UndefinedVariableError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
-    if instruction_type == "D":
+    if "D" in instruction_type:
         if instruction[2] in constants.current_variables:
             return ''
         elif instruction[2] in constants.current_labels:
@@ -59,7 +59,7 @@ def UndefinedVariableError(instruction: list[str]) -> str:
 
 def IllegalImmediateValueError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
-    if instruction_type == "B":
+    if "B" in instruction_type :
         val = int(instruction[2][1:])
         if val < 0 or val > 127:
             return f"IllegalImmediateValueError: Illegal immediate value in line number {constants.line_count}"
@@ -80,7 +80,7 @@ def VariablesNotInBeginning(instructions: list[list] = assembler.instruction) ->
 def UndefinedLabelError(instructions: list[str] = assembler.instruction) -> str:
     for instruction in instructions:
         instruction_type = find_instruction_type(instruction)
-        if instruction_type == "E":
+        if "E" in instruction_type:
             if instruction[1] not in constants.current_labels:
                 return f"UndefinedLabelError: Undefined Label in line number {constants.line_count}"
             elif instruction[1] in constants.current_variables:
