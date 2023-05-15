@@ -94,19 +94,30 @@ def instructionToBinary(instruction: list[str], instructions: list[list[str]] = 
 
 
 def main():
+    open('output.txt', 'w').close()
     for i in instruction:
         if i != []:
             for error in instruction_error_functions_list:
                 if error(i) != "":
                     print(error(i), end='')
+                    with open("output.txt", "a") as f:
+                        f.write(error(i))
+                        f.write('\n')
                     exit()
-            if instructionToBinary(i) != '':
-                print(instructionToBinary(i))
+            instruction_in_binary = instructionToBinary(i)
+            if instruction_in_binary != '':
+                with open("output.txt", "a") as f:
+                    f.write(instruction_in_binary)
+                    f.write('\n')
+                print(instruction_in_binary)
         constants.line_count += 1
         # print(constants.line_count)
 
     for error in file_error_functions_list:
         if error() != "":
+            with open("output.txt", "w") as f:
+                f.write(error(i))
+                f.write('\n')
             print(error(), end='')
             exit()
 
