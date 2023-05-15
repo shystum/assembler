@@ -1,5 +1,5 @@
 # Assembler
-Group Assignment for the Course CSE112CSE 112 Computer Organization
+Group Assignment for the Course CSE112 Computer Organization
 
 Implementing a custom assembler for a given ISA.
 
