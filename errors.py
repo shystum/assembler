@@ -18,8 +18,8 @@ def InvalidRegisterError(instruction: list[str] = assembler.instruction) -> str:
     if 'label' in instruction_type:
         instruction = instruction[1:]
     if "A" in instruction_type or "C" in instruction_type:
-        for i in registers:
-            if i not in instruction[1:]:
+        for i in instruction[1:]:
+            if i not in registers:
                 return f"InvalidRegisterError: Invalid register {i} in line number {constants.line_count}. Is there any typo in the regsiter name?"
         # if not all([i in registers for i in instruction[1:]]):
         #     # print(instruction[1:])
