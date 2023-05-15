@@ -7,8 +7,7 @@ hlt_count = 0
 
 
 def InvalidInstructionError(instruction: list[str]) -> str:
-    instruction_type = find_instruction_type(instruction)
-    if instruction[0] not in opcode and instruction_type != "var" and 'label' not in instruction_type:
+    if instruction[0] not in opcode and instruction[0] != "var" and ':' not in instruction[0]:
         return f"InvalidInstructionError: Invalid instruction in line number {constants.line_count}. Is there any typo in the instruction?"
     else:
         return ""
@@ -19,8 +18,12 @@ def InvalidRegisterError(instruction: list[str] = assembler.instruction) -> str:
     if 'label' in instruction_type:
         instruction = instruction[1:]
     if "A" in instruction_type or "C" in instruction_type:
-        if not all([i in registers for i in instruction[1:]]):
-            return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
+        for i in registers:
+            if i not in instruction[1:]:
+                return f"InvalidRegisterError: Invalid register {i} in line number {constants.line_count}. Is there any typo in the regsiter name?"
+        # if not all([i in registers for i in instruction[1:]]):
+        #     # print(instruction[1:])
+        #     return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
     elif "B" in instruction_type or "D" in instruction_type:
         if instruction[1] not in registers:
             return f"InvalidRegisterError: Invalid register in line number {constants.line_count}. Is there any typo in the regsiter name?"
