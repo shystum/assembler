@@ -9,7 +9,7 @@ Put the input Assembly commands in [input.asm](/input.asm)
 
 Run the [Assembler.py](/assembler.py) in the same directory with input.asm
 
-Output will be in [output.asm](/output.txt) 
+Output will be in [output.txt](/output.txt) 
 
 
 
