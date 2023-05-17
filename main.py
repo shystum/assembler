@@ -1,4 +1,4 @@
-from sys import argv
+from sys import argv, stdin
 from constants import opcode
 from op_func import *
 from errors import *
@@ -6,11 +6,21 @@ from convertors import *
 import constants
 
 # input_file = argv[1]
-input_file = "input.asm"
-instruction = []
+# input_file = "input.asm"
+if constants.isInput:
+    instruction = stdin.readlines()
+    with open("input.asm", "w") as f:
+        f.writelines(instruction)
+    constants.isInput = False
+else:
+    with open("input.asm", "r") as f:
+        instruction = f.readlines()
+    # instruction = 
 
-with open(input_file) as file:
-    instruction = file.readlines()
+# instruction = []
+
+# with open(input_file) as file:
+#     instruction = file.readlines()
 
 # print(instructions)
 # clean whitespaces and split each instruction

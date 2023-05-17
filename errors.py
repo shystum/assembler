@@ -1,6 +1,6 @@
-from assembler import find_instruction_type
+from main import find_instruction_type
 from constants import opcode, registers, current_variables
-import assembler
+import main
 import constants
 
 hlt_count = 0
@@ -13,7 +13,7 @@ def InvalidInstructionError(instruction: list[str]) -> str:
         return ""
 
 
-def InvalidRegisterError(instruction: list[str] = assembler.instruction) -> str:
+def InvalidRegisterError(instruction: list[str] = main.instruction) -> str:
     instruction_type = find_instruction_type(instruction)
     if 'label' in instruction_type:
         instruction = instruction[1:]
@@ -30,7 +30,7 @@ def InvalidRegisterError(instruction: list[str] = assembler.instruction) -> str:
     return ""
 
 
-def HaltError(instructions: list[list] = assembler.instruction) -> str:
+def HaltError(instructions: list[list] = main.instruction) -> str:
     hltCount = 0
     for c in instructions:
         if c:
@@ -75,7 +75,7 @@ def IllegalImmediateValueError(instruction: list[str]) -> str:
     return ""
 
 
-def VariablesNotInBeginning(instructions: list[list] = assembler.instruction) -> str:
+def VariablesNotInBeginning(instructions: list[list] = main.instruction) -> str:
     flagger = 0
     for i in instructions:
         if i:
@@ -86,7 +86,7 @@ def VariablesNotInBeginning(instructions: list[list] = assembler.instruction) ->
     return ""
 
 
-def UndefinedLabelError(instructions: list[str] = assembler.instruction) -> str:
+def UndefinedLabelError(instructions: list[str] = main.instruction) -> str:
     for instruction in instructions:
         instruction_type = find_instruction_type(instruction)
         if "E" in instruction_type:

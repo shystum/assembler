@@ -1,5 +1,8 @@
 global line_count
 global var_count
+global isInput 
+
+isInput=True
 line_count = 1
 var_count = 0
 
