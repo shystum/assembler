@@ -13,6 +13,16 @@ def InvalidInstructionError(instruction: list[str]) -> str:
         return ""
 
 
+def IllegalFlagError(instruction: list[str]) -> str:
+    instruction_type = find_instruction_type(instruction)
+    if instruction_type != "C" and "FLAGS" in instruction:
+        return f"IllegalFlagError: Illegal flag usage in line number {constants.line_count}"
+    if instruction_type == "C" and "FLAGS" in instruction:
+        if "FLAGS" != instruction[2]:
+            return f"IllegalFlagError: Illegal flag usage in line number {constants.line_count}"
+    return ""
+
+
 def InvalidRegisterError(instruction: list[str] = main.instruction) -> str:
     instruction_type = find_instruction_type(instruction)
     if 'label' in instruction_type:
@@ -68,7 +78,7 @@ def IllegalImmediateValueError(instruction: list[str]) -> str:
     instruction_type = find_instruction_type(instruction)
     if 'label' in instruction_type:
         instruction = instruction[1:]
-    if "B" in instruction_type :
+    if "B" in instruction_type:
         val = int(instruction[2][1:])
         if val < 0 or val > 127:
             return f"IllegalImmediateValueError: Illegal immediate value in line number {constants.line_count}"
@@ -98,5 +108,6 @@ def UndefinedLabelError(instructions: list[str] = main.instruction) -> str:
 
 
 instruction_error_functions_list = [
-    InvalidInstructionError, InvalidRegisterError, IllegalImmediateValueError, UndefinedVariableError]
-file_error_functions_list = [HaltError, VariablesNotInBeginning, UndefinedLabelError]
+    InvalidInstructionError, InvalidRegisterError, IllegalImmediateValueError, UndefinedVariableError, IllegalFlagError]
+file_error_functions_list = [HaltError,
+                             VariablesNotInBeginning, UndefinedLabelError]
