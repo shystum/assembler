@@ -1,0 +1,1 @@
+HaltError: No hlt instruction found
