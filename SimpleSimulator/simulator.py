@@ -1,15 +1,13 @@
-from memory import *
-from RF import *
-from EE import *
+from instances import ee, mem, rf
 
-mem = MEMORY()
+
 halted = False
-RF = RF()
-EE = EE()
+
 
 while not halted:
     Instruction = mem.getInstruction(mem.pc_counter)
-    halted,mem.pc_counter = EE.execute(Instruction)
+    halted,mem.pc_counter = ee.execute(Instruction,mem, rf)
     #pc.dump()
-    #RF.dump()
+    #pc.dump()
+    # rf.dump()
     #pc.update(new_pc)

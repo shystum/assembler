@@ -1,4 +1,5 @@
 from operations import *
+
 class EE:
     def __init__(self):
         self.operations ={
@@ -23,7 +24,7 @@ class EE:
             '11111':jump_if_equal,
             '11010': halt
         } 
-    def execute(self,instruction):
+    def execute(self,instruction,mem, rf):
         opcode = instruction[:5]
-        self.operations[opcode](instruction)
-        return mem.halted,mem.pc_counter
+        mem, rf = self.operations[opcode](instruction, mem, rf)
+        return mem.halted,mem.pc_counter+1
