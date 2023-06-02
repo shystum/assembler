@@ -18,4 +18,5 @@ class MEMORY:
     def getBinarypc_counter(self):
         return convertors.integerToSevenBitBinary(self.pc_counter)
 
-
+    def pc_dump(self):
+        print(convertors.integerToEightBitBinary(self.pc_counter) ,end=" ")
