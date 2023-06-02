@@ -34,6 +34,9 @@ def move_immediate(instruction,mem, rf):
 def move_register(instruction,mem, rf):
     reg1 = instruction[10:13]
     reg2 = instruction[13:16]
+    if reg2=='111':
+        rf.registers[reg1]=int(rf.registers[reg2],2)
+        return mem, rf
     rf.registers[reg1] = rf.registers[reg2]
     return mem, rf
 
@@ -41,7 +44,7 @@ def load(instruction,mem, rf):
     reg = instruction[6:9]
     address = instruction[9:16]
     address=int(address,2)
-    rf.registers[reg]=mem.memory[address]
+    rf.registers[reg]= address
     return mem, rf
 
 def store(instruction,mem, rf):
