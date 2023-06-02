@@ -21,4 +21,8 @@ class MEMORY:
         return convertors.integerToSevenBitBinary(self.pc_counter)
 
     def pc_dump(self):
-        print(convertors.integerToEightBitBinary(self.pc_counter), end=" ")
+        print(convertors.integerToSevenBitBinary(self.pc_counter), end=" "*8)
+
+    def dump(self):
+        for i in self.memory:
+            print(i)

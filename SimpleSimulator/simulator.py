@@ -9,3 +9,4 @@ while not halted:
     mem.pc_dump()
     halted, mem.pc_counter = ee.execute(Instruction, mem, rf)
     rf.dump()
+mem.dump()
