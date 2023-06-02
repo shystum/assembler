@@ -8,10 +8,10 @@ def add(Instruction, mem, rf):
     if (rf.registers[reg2] + rf.registers[reg3]) > 65535:
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + "1" + rf.registers["111"][13:]
-        return mem, rf
+        return mem, rf, True
 
     rf.registers[reg1] = rf.registers[reg2] + rf.registers[reg3]
-    return mem, rf
+    return mem, rf, False
 
 
 def subtract(instruction, mem, rf):
@@ -21,10 +21,10 @@ def subtract(instruction, mem, rf):
     if rf.registers[reg3] > rf.registers[reg2]:
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + "1" + rf.registers["111"][13:]
-        return mem, rf
+        return mem, rf, True
 
     rf.registers[reg1] = rf.registers[reg2] - rf.registers[reg3]
-    return mem, rf
+    return mem, rf, False
 
 
 def move_immediate(instruction, mem, rf):
@@ -32,7 +32,7 @@ def move_immediate(instruction, mem, rf):
     imm = instruction[9:16]
     imm = int(imm, 2)
     rf.registers[reg1] = imm
-    return mem, rf
+    return mem, rf, False
 
 
 def move_register(instruction, mem, rf):
@@ -40,9 +40,9 @@ def move_register(instruction, mem, rf):
     reg2 = instruction[13:16]
     if reg2 == "111":
         rf.registers[reg1] = int(rf.registers[reg2], 2)
-        return mem, rf
+        return mem, rf, False
     rf.registers[reg1] = rf.registers[reg2]
-    return mem, rf
+    return mem, rf, False
 
 
 def load(instruction, mem, rf):
@@ -50,7 +50,7 @@ def load(instruction, mem, rf):
     address = instruction[9:16]
     address = int(address, 2)
     rf.registers[reg] = address
-    return mem, rf
+    return mem, rf, False
 
 
 def store(instruction, mem, rf):
@@ -58,7 +58,7 @@ def store(instruction, mem, rf):
     address = instruction[9:16]
     address = int(address, 2)
     mem.memory[address] = integerToSixteenBitBinary(rf.registers[reg])
-    return mem, rf
+    return mem, rf, False
 
 
 def multiply(instruction, mem, rf):
@@ -68,9 +68,9 @@ def multiply(instruction, mem, rf):
     if (rf.registers[reg2] * rf.registers[reg3]) > 65535:
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + "1" + rf.registers["111"][13:]
-        return mem, rf
+        return mem, rf, True
     rf.registers[reg1] = rf.registers[reg2] * rf.registers[reg3]
-    return mem, rf
+    return mem, rf, False
 
 
 def divide(instruction, mem, rf):
@@ -80,10 +80,10 @@ def divide(instruction, mem, rf):
         rf.registers["000"] = 0
         rf.registers["001"] = 0
         rf.registers["111"] = rf.registers["111"][:12] + "1" + rf.registers["111"][13:]
-        return mem, rf
+        return mem, rf, True
     rf.registers["000"] = rf.registers[reg1] // rf.registers[reg2]
     rf.registers["001"] = rf.registers[reg1] % rf.registers[reg2]
-    return mem, rf
+    return mem, rf, False
 
 
 def right_shift(instruction, mem, rf):
@@ -91,7 +91,7 @@ def right_shift(instruction, mem, rf):
     imm = instruction[9:16]
     imm = int(imm, 2)
     rf.registers[reg1] = (rf.registers[reg1] >> imm) % 65536
-    return mem, rf
+    return mem, rf, False
 
 
 def left_shift(instruction, mem, rf):
@@ -99,7 +99,7 @@ def left_shift(instruction, mem, rf):
     imm = instruction[9:16]
     imm = int(imm, 2)
     rf.registers[reg1] = (rf.registers[reg1] << imm) % 65536
-    return mem, rf
+    return mem, rf, False
 
 
 def xor(instruction, mem, rf):
@@ -107,7 +107,7 @@ def xor(instruction, mem, rf):
     reg2 = instruction[10:13]
     reg3 = instruction[13:16]
     rf.registers[reg1] = rf.registers[reg2] ^ rf.registers[reg3]
-    return mem, rf
+    return mem, rf, False
 
 
 def Or(instruction, mem, rf):
@@ -115,7 +115,7 @@ def Or(instruction, mem, rf):
     reg2 = instruction[10:13]
     reg3 = instruction[13:16]
     rf.registers[reg1] = rf.registers[reg2] | rf.registers[reg3]
-    return mem, rf
+    return mem, rf, False
 
 
 def And(instruction, mem, rf):
@@ -123,14 +123,14 @@ def And(instruction, mem, rf):
     reg2 = instruction[10:13]
     reg3 = instruction[13:16]
     rf.registers[reg1] = rf.registers[reg2] & rf.registers[reg3]
-    return mem, rf
+    return mem, rf, False
 
 
 def Invert(instruction, mem, rf):
     reg1 = instruction[10:13]
     reg2 = instruction[13:16]
     rf.registers[reg1] = ~rf.registers[reg2]
-    return mem, rf
+    return mem, rf, False
 
 
 def compare(instruction, mem, rf):
@@ -142,14 +142,14 @@ def compare(instruction, mem, rf):
         rf.registers["111"] = rf.registers["111"][:14] + "1" + rf.registers["111"][15:]
     else:
         rf.registers["111"] = rf.registers["111"][:13] + "1" + rf.registers["111"][14:]
-    return mem, rf
+    return mem, rf, True
 
 
 def jump_unconditional(instruction, mem, rf):
     address = instruction[9:16]
     address = int(address, 2)
     mem.pc_counter = address - 1
-    return mem, rf
+    return mem, rf, False
 
 
 def jump_if_less_than(instruction, mem, rf):
@@ -157,7 +157,7 @@ def jump_if_less_than(instruction, mem, rf):
     address = int(address, 2)
     if rf.registers["111"][13] == "1":
         mem.pc_counter = address - 1
-    return mem, rf
+    return mem, rf, False
 
 
 def jump_if_greater_than(instruction, mem, rf):
@@ -165,7 +165,7 @@ def jump_if_greater_than(instruction, mem, rf):
     address = int(address, 2)
     if rf.registers["111"][14] == "1":
         mem.pc_counter = address - 1
-    return mem, rf
+    return mem, rf, False
 
 
 def jump_if_equal(instruction, mem, rf):
@@ -173,9 +173,9 @@ def jump_if_equal(instruction, mem, rf):
     address = int(address, 2)
     if rf.registers["111"][15] == "1":
         mem.pc_counter = address - 1
-    return mem, rf
+    return mem, rf, False
 
 
 def halt(instruction, mem, rf):
     mem.halted = True
-    return mem, rf
+    return mem, rf, False

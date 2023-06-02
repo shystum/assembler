@@ -28,5 +28,5 @@ class EE:
 
     def execute(self, instruction, mem, rf):
         opcode = instruction[:5]
-        mem, rf = self.operations[opcode](instruction, mem, rf)
-        return mem.halted, mem.pc_counter + 1
+        mem, rf, flag_change = self.operations[opcode](instruction, mem, rf)
+        return mem.halted, mem.pc_counter + 1, flag_change
