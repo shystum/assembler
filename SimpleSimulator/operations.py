@@ -41,7 +41,7 @@ def load(instruction,mem, rf):
     reg = instruction[6:9]
     address = instruction[9:16]
     address=int(address,2)
-    rf.registers[reg]=mem.memory(address)
+    rf.registers[reg]=mem.memory[address]
     return mem, rf
 
 def store(instruction,mem, rf):
@@ -135,21 +135,21 @@ def jump_unconditional(instruction,mem, rf):
 def jump_if_less_than(instruction,mem, rf):
     address= instruction[9:16]
     address = int(address,2)
-    if rf.registers['111'][14] == '1':
+    if rf.registers['111'][13] == '1':
         mem.pc_counter = address
     return mem, rf
 
 def jump_if_greater_than(instruction,mem, rf):
     address= instruction[9:16]
     address = int(address,2)
-    if rf.registers['111'][15] == '1':
+    if rf.registers['111'][14] == '1':
         mem.pc_counter = address
     return mem, rf
 
 def jump_if_equal(instruction,mem, rf):
     address= instruction[9:16]
     address = int(address,2)
-    if rf.registers['111'][16] == '1':
+    if rf.registers['111'][15] == '1':
         mem.pc_counter = address
     return mem, rf
 
