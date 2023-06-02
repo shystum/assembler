@@ -129,28 +129,28 @@ def compare(instruction,mem, rf):
 def jump_unconditional(instruction,mem, rf):
     address= instruction[9:16]
     address = int(address,2)
-    mem.pc_counter = address
+    mem.pc_counter = address - 1
     return mem, rf
 
 def jump_if_less_than(instruction,mem, rf):
     address= instruction[9:16]
     address = int(address,2)
     if rf.registers['111'][13] == '1':
-        mem.pc_counter = address
+        mem.pc_counter = address - 1
     return mem, rf
 
 def jump_if_greater_than(instruction,mem, rf):
     address= instruction[9:16]
     address = int(address,2)
     if rf.registers['111'][14] == '1':
-        mem.pc_counter = address
+        mem.pc_counter = address - 1
     return mem, rf
 
 def jump_if_equal(instruction,mem, rf):
     address= instruction[9:16]
     address = int(address,2)
     if rf.registers['111'][15] == '1':
-        mem.pc_counter = address
+        mem.pc_counter = address - 1
     return mem, rf
 
 def halt(instruction,mem, rf):
