@@ -24,6 +24,8 @@ class EE:
             "11101": jump_if_greater_than,
             "11111": jump_if_equal,
             "11010": halt,
+            "10000": F_addition,
+            '10010': movF,
         }
 
     def execute(self, instruction, mem, rf):

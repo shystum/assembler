@@ -1,16 +1,18 @@
 from convertors import *
 
 
-def add(Instruction, mem, rf):
-    reg1 = Instruction[7:10]
-    reg2 = Instruction[10:13]
-    reg3 = Instruction[13:16]
-    if (rf.registers[reg2] + rf.registers[reg3]) > 65535:
+def add(instruction, mem, rf):
+    reg1 = instruction[7:10]
+    reg2 = instruction[10:13]
+    reg3 = instruction[13:16]
+    if (rf.registers[reg2] + rf.registers[reg3]) > 127:
         rf.registers[reg1] = 0
-        rf.registers["111"] = rf.registers["111"][:12] + "1" + rf.registers["111"][13:]
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
         return mem, rf, True
 
     rf.registers[reg1] = rf.registers[reg2] + rf.registers[reg3]
+
     return mem, rf, False
 
 
@@ -20,7 +22,8 @@ def subtract(instruction, mem, rf):
     reg3 = instruction[13:16]
     if rf.registers[reg3] > rf.registers[reg2]:
         rf.registers[reg1] = 0
-        rf.registers["111"] = rf.registers["111"][:12] + "1" + rf.registers["111"][13:]
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
         return mem, rf, True
 
     rf.registers[reg1] = rf.registers[reg2] - rf.registers[reg3]
@@ -65,9 +68,10 @@ def multiply(instruction, mem, rf):
     reg1 = instruction[7:10]
     reg2 = instruction[10:13]
     reg3 = instruction[13:16]
-    if (rf.registers[reg2] * rf.registers[reg3]) > 65535:
+    if (rf.registers[reg2] * rf.registers[reg3]) > 127:
         rf.registers[reg1] = 0
-        rf.registers["111"] = rf.registers["111"][:12] + "1" + rf.registers["111"][13:]
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
         return mem, rf, True
     rf.registers[reg1] = rf.registers[reg2] * rf.registers[reg3]
     return mem, rf, False
@@ -79,7 +83,8 @@ def divide(instruction, mem, rf):
     if rf.registers[reg2] == 0:
         rf.registers["000"] = 0
         rf.registers["001"] = 0
-        rf.registers["111"] = rf.registers["111"][:12] + "1" + rf.registers["111"][13:]
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
         return mem, rf, True
     rf.registers["000"] = rf.registers[reg1] // rf.registers[reg2]
     rf.registers["001"] = rf.registers[reg1] % rf.registers[reg2]
@@ -139,9 +144,11 @@ def compare(instruction, mem, rf):
     if rf.registers[reg1] == rf.registers[reg2]:
         rf.registers["111"] = rf.registers["111"][:15] + "1"
     elif rf.registers[reg1] > rf.registers[reg2]:
-        rf.registers["111"] = rf.registers["111"][:14] + "1" + rf.registers["111"][15:]
+        rf.registers["111"] = rf.registers["111"][:14] + \
+            "1" + rf.registers["111"][15:]
     else:
-        rf.registers["111"] = rf.registers["111"][:13] + "1" + rf.registers["111"][14:]
+        rf.registers["111"] = rf.registers["111"][:13] + \
+            "1" + rf.registers["111"][14:]
     return mem, rf, True
 
 
@@ -178,4 +185,49 @@ def jump_if_equal(instruction, mem, rf):
 
 def halt(instruction, mem, rf):
     mem.halted = True
+    return mem, rf, False
+
+
+def F_addition(instruction, mem, rf):
+    reg1 = instruction[7:10]
+    reg2 = instruction[10:13]
+    reg3 = instruction[13:16]
+    reg2_val = eightBitBinaryFloatTofloat(rf.registers[reg2])
+    reg3_val = eightBitBinaryFloatTofloat(rf.registers[reg3])
+    ans = reg2_val + reg3_val
+    if ans > 31.5:
+        rf.registers[reg1] = 0
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
+    else:
+        rf.registers[reg1] = floatToEightBitBinaryFloat(ans)
+    return mem, rf, False
+
+
+def F_subtraction(instruction, mem, rf):
+    reg1 = instruction[7:10]
+    reg2 = instruction[10:13]
+    reg3 = instruction[13:16]
+    reg2_val = eightBitBinaryFloatTofloat(rf.registers[reg2])
+    reg3_val = eightBitBinaryFloatTofloat(rf.registers[reg3])
+    if reg2_val < reg3_val:
+        rf.registers[reg1] = 0
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
+    elif ans > 31.5:
+        rf.registers[reg1] = 0
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
+    else:
+        ans = reg2_val - reg3_val
+        rf.registers[reg1] = floatToEightBitBinaryFloat(ans)
+
+    return mem, rf, False
+
+
+def movF(instruction, mem, rf):
+    reg = instruction[5:8]
+    imm = instruction[8:16]
+    imm = floatToEightBitBinaryFloat(imm)
+    rf.registers[reg] = imm
     return mem, rf, False
