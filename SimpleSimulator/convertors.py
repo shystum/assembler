@@ -45,7 +45,7 @@ def floatToEightBitBinaryFloat(n: float) -> str:
     n = floatToBinary(n)
     parts = n.split('.')
     mantissa = parts[0][1:] + parts[1]
-    if len(mantissa > 5):
+    if len(mantissa) > 5:
         return -1
     mantissa = mantissa.ljust(5, '0')
     zeroOneFlag = bool(int(parts[0][0]))

@@ -1,11 +1,12 @@
 from convertors import *
+MAX_INT = 2**16 - 1
 
 
 def add(instruction, mem, rf):
     reg1 = instruction[7:10]
     reg2 = instruction[10:13]
     reg3 = instruction[13:16]
-    if (rf.registers[reg2] + rf.registers[reg3]) > 127:
+    if (rf.registers[reg2] + rf.registers[reg3]) > MAX_INT:
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + \
             "1" + rf.registers["111"][13:]
@@ -68,7 +69,7 @@ def multiply(instruction, mem, rf):
     reg1 = instruction[7:10]
     reg2 = instruction[10:13]
     reg3 = instruction[13:16]
-    if (rf.registers[reg2] * rf.registers[reg3]) > 127:
+    if (rf.registers[reg2] * rf.registers[reg3]) > MAX_INT:
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + \
             "1" + rf.registers["111"][13:]
@@ -195,7 +196,7 @@ def F_addition(instruction, mem, rf):
     reg2_val = eightBitBinaryFloatTofloat(rf.registers[reg2])
     reg3_val = eightBitBinaryFloatTofloat(rf.registers[reg3])
     ans = reg2_val + reg3_val
-    if ans > 31.5:
+    if ans > 31.5 or ans < 0.26:
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + \
             "1" + rf.registers["111"][13:]
@@ -214,7 +215,7 @@ def F_subtraction(instruction, mem, rf):
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + \
             "1" + rf.registers["111"][13:]
-    elif ans > 31.5:
+    elif ans > 31.5 or ans < 0.25:
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + \
             "1" + rf.registers["111"][13:]
@@ -231,3 +232,77 @@ def movF(instruction, mem, rf):
     imm = floatToEightBitBinaryFloat(imm)
     rf.registers[reg] = imm
     return mem, rf, False
+
+
+def addI(instruction, mem, rf):
+    reg1 = instruction[6:9]
+    imm = instruction[9:16]
+    imm = int(imm, 2)
+    ans = rf.registers[reg1] + imm
+    if ans > MAX_INT:
+        rf.registers[reg1] = 0
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
+        return mem, rf, True
+    else:
+        rf.registers[reg1] = (rf.registers[reg1] + imm)
+        return mem, rf, False
+
+
+def subI(instruction, mem, rf):
+    reg1 = instruction[6:9]
+    imm = instruction[9:16]
+    imm = int(imm, 2)
+    ans = rf.registers[reg1] - imm
+    if ans < 0:
+        rf.registers[reg1] = 0
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
+        return mem, rf, True
+    else:
+        rf.registers[reg1] = (rf.registers[reg1] - imm)
+        return mem, rf, False
+
+
+def mulI(instruction, mem, rf):
+    reg1 = instruction[6:9]
+    imm = instruction[9:16]
+    imm = int(imm, 2)
+    ans = rf.registers[reg1] * imm
+    if ans > MAX_INT:
+        rf.registers[reg1] = 0
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
+        return mem, rf, True
+    else:
+        rf.registers[reg1] = (rf.registers[reg1] * imm)
+        return mem, rf, False
+
+
+def mod(instruction, mem, rf):
+    reg1 = instruction[7:10]
+    reg2 = instruction[10:13]
+    reg3 = instruction[13:16]
+    if (rf.registers[reg2] % rf.registers[reg3]) > MAX_INT:
+        rf.registers[reg1] = 0
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
+        return mem, rf, True
+    else:
+        rf.registers[reg1] = rf.registers[reg2] % rf.registers[reg3]
+        return mem, rf, False
+
+
+def xorI(instruction, mem, rf):
+    reg1 = instruction[7:10]
+    reg2 = instruction[10:13]
+    imm = instruction[13:16]
+    imm = int(imm, 2)
+    if (rf.registers[reg1] > MAX_INT):
+        rf.registers[reg1] = 0
+        rf.registers["111"] = rf.registers["111"][:12] + \
+            "1" + rf.registers["111"][13:]
+        return mem, rf, True
+    else:
+        rf.registers[reg1] = rf.registers[reg2] ^ imm
+        return mem, rf, False

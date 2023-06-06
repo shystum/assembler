@@ -25,7 +25,13 @@ class EE:
             "11111": jump_if_equal,
             "11010": halt,
             "10000": F_addition,
-            '10010': movF,
+            "10001": F_subtraction,
+            "10010": movF,
+            "10011": addI,
+            "10100": subI,
+            "10101": mulI,
+            "10110": mod,
+            "10111": xorI
         }
 
     def execute(self, instruction, mem, rf):
