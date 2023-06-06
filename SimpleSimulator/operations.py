@@ -199,15 +199,15 @@ def F_addition(instruction, mem, rf):
     reg1 = instruction[7:10]
     reg2 = instruction[10:13]
     reg3 = instruction[13:16]
-    reg2_val = eightBitBinaryFloatTofloat(rf.registers[reg2])
-    reg3_val = eightBitBinaryFloatTofloat(rf.registers[reg3])
+    reg2_val = (rf.registers[reg2])
+    reg3_val = (rf.registers[reg3])
     ans = reg2_val + reg3_val
     if ans > 31.5 or ans < 0.26:
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + \
             "1" + rf.registers["111"][13:]
     else:
-        rf.registers[reg1] = floatToEightBitBinaryFloat(ans)
+        rf.registers[reg1] = (ans)
     return mem, rf, False
 
 
@@ -215,8 +215,9 @@ def F_subtraction(instruction, mem, rf):
     reg1 = instruction[7:10]
     reg2 = instruction[10:13]
     reg3 = instruction[13:16]
-    reg2_val = eightBitBinaryFloatTofloat(rf.registers[reg2])
-    reg3_val = eightBitBinaryFloatTofloat(rf.registers[reg3])
+    reg2_val = (rf.registers[reg2])
+    reg3_val = (rf.registers[reg3])
+    ans = reg2_val - reg3_val
     if reg2_val < reg3_val:
         rf.registers[reg1] = 0
         rf.registers["111"] = rf.registers["111"][:12] + \
@@ -226,8 +227,7 @@ def F_subtraction(instruction, mem, rf):
         rf.registers["111"] = rf.registers["111"][:12] + \
             "1" + rf.registers["111"][13:]
     else:
-        ans = reg2_val - reg3_val
-        rf.registers[reg1] = floatToEightBitBinaryFloat(ans)
+        rf.registers[reg1] = (ans)
 
     return mem, rf, False
 
@@ -235,7 +235,8 @@ def F_subtraction(instruction, mem, rf):
 def movF(instruction, mem, rf):
     reg = instruction[5:8]
     imm = instruction[8:16]
-    imm = floatToEightBitBinaryFloat(imm)
+    imm = eightBitBinaryFloatTofloat(imm)
+    # imm = floatToEightBitBinaryFloat(imm)
     rf.registers[reg] = imm
     return mem, rf, False
 

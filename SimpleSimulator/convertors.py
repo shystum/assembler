@@ -49,12 +49,12 @@ def floatToEightBitBinaryFloat(n: float) -> str:
         return -1
     mantissa = mantissa.ljust(5, '0')
     zeroOneFlag = bool(int(parts[0][0]))
-    print(zeroOneFlag)
+    # print(zeroOneFlag)
     # exp = -3 if not zeroOneFlag else len(parts[0]) - 1
-    print(parts)
+    # print(parts)
     E = bin(len(parts[0]) - 1 + 3)[2:] if zeroOneFlag else 0
     E = str(E)
-    print(E)
+    # print(E)
     E = E.zfill(3)
     return E + mantissa
 
@@ -63,7 +63,7 @@ def eightBitBinaryFloatTofloat(n: str) -> float:
     exp = n[:3]
     mantissa = n[3:]
     exp_value = int(exp, 2) - 3
-    mantissa = '0' + mantissa if exp == '0' else '1' + mantissa
+    mantissa = '0' + mantissa if exp == '0.' else '1.' + mantissa
     mantissa_value = binaryToFloat(mantissa)
     result = mantissa_value * (2 ** exp_value)
-    return result
+    return float(result)

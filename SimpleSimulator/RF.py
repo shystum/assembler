@@ -17,5 +17,9 @@ class RF:
     def dump(self):
         r = list(self.registers.values())
         for i in range(7):
-            print(convertors.integerToSixteenBitBinary(r[i]), end=" ")
+            if (type(r[i])) == int:
+                print(convertors.integerToSixteenBitBinary(r[i]), end=" ")
+            else:
+                val = convertors.floatToEightBitBinaryFloat(r[i])
+                print(val.rjust(16,'0'), end=" ")
         print(r[-1])

@@ -67,5 +67,5 @@ def typeF(instruction: list[str]) -> str:
 def typeG(instruction: list[str]) -> str:
     binary_instruction = ''
     binary_instruction += registers[instruction[1]]
-    binary_instruction += floatToEightBitBinaryFloat(float(instruction[2]))
+    binary_instruction += floatToEightBitBinaryFloat(float(instruction[2][1:]))
     return binary_instruction
