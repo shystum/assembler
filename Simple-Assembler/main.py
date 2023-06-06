@@ -83,6 +83,9 @@ def instructionToBinary(instruction: list[str], instructions: list[list[str]] = 
 
     elif instruction_type == "B":
         binary_instruction += typeB(instruction)
+    
+    elif instruction_type == "G":
+        binary_instruction += typeG(instruction)
 
     elif instruction_type == "C":
         binary_instruction += typeC(instruction)

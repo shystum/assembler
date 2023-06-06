@@ -63,3 +63,9 @@ def typeF(instruction: list[str]) -> str:
     unused_bits = '0'*(total_bits - opcode_bits)
     binary_instruction += unused_bits
     return binary_instruction
+
+def typeG(instruction: list[str]) -> str:
+    binary_instruction = ''
+    binary_instruction += registers[instruction[1]]
+    binary_instruction += floatToEightBitBinaryFloat(float(instruction[2]))
+    return binary_instruction
