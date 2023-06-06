@@ -52,8 +52,10 @@ def move_register(instruction, mem, rf):
 def load(instruction, mem, rf):
     reg = instruction[6:9]
     address = instruction[9:16]
-    address = int(address, 2)
-    rf.registers[reg] = address
+    num = mem.memory[int(address, 2)]
+    num = int(num, 2)
+    # print(address)
+    rf.registers[reg] = num
     return mem, rf, False
 
 
@@ -135,7 +137,11 @@ def And(instruction, mem, rf):
 def Invert(instruction, mem, rf):
     reg1 = instruction[10:13]
     reg2 = instruction[13:16]
-    rf.registers[reg1] = ~rf.registers[reg2]
+    num = integerToSixteenBitBinary(rf.registers[reg2])
+    num = ''.join(['1' if x == '0' else '0' for x in num])
+    num = int(num, 2)
+    rf.registers[reg1] = num
+    # print(~rf.registers[reg2])
     return mem, rf, False
 
 

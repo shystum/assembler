@@ -100,6 +100,10 @@ def UndefinedLabelError(instructions: list[str] = main.instruction) -> str:
     for instruction in instructions:
         instruction_type = find_instruction_type(instruction)
         if "E" in instruction_type:
+            if ':' in instruction[0]:
+                instruction = instruction[1:]
+            # print(constants.current_labels)
+            # print(instruction)
             if instruction[1] not in constants.current_labels:
                 return f"UndefinedLabelError: Undefined Label in line number {constants.line_count}"
             elif instruction[1] in constants.current_variables:

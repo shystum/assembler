@@ -30,7 +30,7 @@ instruction = [i.strip().split() for i in instruction if i.strip() != '']
 constants.var_count = len([i for i in instruction if 'var' in i])
 # print(constants.var_count)
 # print(total_lines, total_lines-constants.var_count + 1)
-current_address = integerToSevenBitBinary(total_lines - constants.var_count)
+current_address = integerToSevenBitBinary(len(instruction) - constants.var_count)
 for i in range(len(instruction)):
     if ':' in instruction[i][0]:
         if instruction[i][0][:-1] not in constants.current_labels:
