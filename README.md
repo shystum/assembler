@@ -1,11 +1,11 @@
 # Assembler
-Group Assignment for the Course CSE112 Computer Organization
+Group Assignment for the course CSE112 - Computer Organization.
 
-Implementing a custom assembler for a given ISA.
+Implemented a custom assembler and simulator for a given ISA.
 
 ##
 ### Instructions:
-Run ./run --no-sim inside automatedTested directory to run the assembler test cases.
+Run ./run inside the automatedTested directory to run the automated assembler and simulator test cases.
 
 
 ##
